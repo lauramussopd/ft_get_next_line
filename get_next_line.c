@@ -47,16 +47,17 @@ char *copy_line(char *buf)
     while (buf[i] && buf[i] != '\n')
         i++;
     if (buf[i] == '\n')
-        line = malloc((i + 2) * sizeof(char));
-    else
+        i++;
+    // line = malloc((i + 2) * sizeof(char));
+   // else
         line = malloc((i + 1) *sizeof(char));
     while (x < i)
     {
         line[x] = buf[x];
         x++;
     }
-    if (buf[i] == '\n')
-        line[x++] = '\n';
+   // if (buf[i] == '\n')
+   //     line[x++] = '\n';
     line[x] = '\0';
     return(line);
 }
