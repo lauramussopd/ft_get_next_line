@@ -62,24 +62,30 @@ char *copy_line(char *buf)
     return(line);
 }
 
+char *update_buf(char *line)
+{
+
+}
+
 char *get_next_line(int fd)
 {
     char        *line; //lo que vamos a devolver
     static char *buf = NULL;
     
-    //if (fd < 0)
-    //    return (NULL);
+    if (fd < 0)
+        return (NULL);
     buf = fill_buf(fd, buf); //el fd e quello che era rimansto nella linea anteriore; si no hay buff retur
     if(!buf)
    return (NULL);
    line = copy_line(buf);
-    //if(!line)
-     //   return(NULL);
+    if(!line)
+       return (NULL);
    /* buf = update_buf(buf);
     if(!buf)
     return(NULL);*/
     return(line); //aqui tendriamo que devolver la linea
 }
+
 int main (int args, char **argv)
 {
     int fd1;
@@ -93,12 +99,13 @@ int main (int args, char **argv)
     i = 1;
     line = get_next_line(fd1); // Legge una riga dal file utilizzando get_next_line finché non raggiunge la fine del file
 
-   // while (line)
- //  {
+  // while (line)
+  // {
         printf("line [%02d]: %s", i, line); // Stampa il numero della linæea e il contenuto della linea
-        // free(line);
-        //line = get_next_line(fd1);    //legge la prossima linea
-  //  }
+        free(line);
+   // i++;
+        line = get_next_line(fd1);    //legge la prossima linea
+  //   }
     close(fd1);
     return (0);
 }
