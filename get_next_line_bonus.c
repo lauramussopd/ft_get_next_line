@@ -1,18 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: laurmuss <laurmuss@student.42barcelona.co  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 16:31:02 by laurmuss          #+#    #+#             */
-/*   Updated: 2023/08/19 13:58:32 by laurmuss         ###   ########.fr       */
+/*   Updated: 2023/08/19 13:56:41 by laurmuss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdlib.h>
 #include <fcntl.h>
 #include <stdio.h>
-#include "get_next_line.h"
+#include <limits.h>
+#include "get_next_line_bonus.h"
 
 char	*fill_buf(int fd, char *buf)
 {
@@ -87,23 +88,23 @@ char	*update_buf(char *buf)
 
 char	*get_next_line(int fd)
 {
-	static char	*buf = NULL;
+	static char	*buf[OPEN_MAX] = {NULL};
 	char		*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
-		return (true_free(&buf));
-	if (!buf || (buf && !ft_strchr(buf, '\n')))
-		buf = fill_buf(fd, buf); 
-	if (!buf)
+		return (true_free(&buf[fd]));
+	if (!buf[fd] || (buf[fd] && !ft_strchr(buf[fd], '\n')))
+		buf[fd] = fill_buf(fd, buf[fd]); 
+	if (!buf[fd])
 		return (NULL);
-	line = copy_line(buf);
+	line = copy_line(buf[fd]);
 	if (!line)
-		return (true_free(&buf));
-	buf = update_buf(buf);
+		return (true_free(&buf[fd]));
+	buf[fd] = update_buf(buf[fd]);
 	return (line); 
 }
-/*
-int main(int args, char **argv)
+
+int	main(int args, char **argv)
 {
 	int fd1;
 	int fd2;
@@ -134,26 +135,3 @@ int main(int args, char **argv)
 	return (0);
 }
 
-int main(int args, char **argv)
-{
-	int fd1;
-	char *line; 
-	int i;		
-	if (args != 2)
-		return (1);
-	fd1 =  open(argv[1], O_RDONLY, 0);
-	if (fd1 < 0)
-		return (1);
-	i = 0;
-	line = get_next_line(fd1); 
-
-	while (line != NULL)
-	{
-		printf("%s", line); 
-		free(line);
-		line = get_next_line(fd1); 
-	}
-	close(fd1);
-	return (0);
-}
-*/
